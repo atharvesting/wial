@@ -1,0 +1,52 @@
+.columns {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+}
+
+.left_sidebar {
+    flex: 0 0 22%;      /* lock left to 30% */
+}
+
+.right_main {
+    flex: 1;            /* takes remaining width */
+    overflow-y: auto;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(52, minmax(0, 1fr)); /* force 52 cols */
+    gap: 3px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grid button {
+    aspect-ratio: 1 / 1;     /* enforce squares */
+    width: 100%;             /* fill grid cell */
+    background-color: lightgray;
+    border: 1px solid #999;
+    font-size: 8px;
+    padding: 0;              /* remove padding so squares stay equal */
+    box-sizing: border-box;
+}
+
+/* Hover highlighting */
+.grid button.is-hovered {
+    background-color: #616161; /* darker for the hovered button */
+    border-color: #6b7a86;
+}
+
+.grid button.is-row-highlight {
+    background-color: #9d9d9d; /* lighter highlight for row */
+}
+
+.grid button.is-col-highlight {
+    background-color: #9d9d9d; /* lighter highlight for column */
+}
+
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} 
