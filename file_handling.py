@@ -2,17 +2,40 @@ import sqlite3
 from datetime import datetime, timedelta
 import os
 from misc import calculate_age_given_birthdate_and_current_date
+from query_class import Query
 
 class FileHandling:
-    def __init__(self, weekject: str):
-        """
-        Initialize the FileHandling object.
 
-        Args:
-            weekject (str): Path to the SQLite database file.
-        """
-        self.con = sqlite3.connect(weekject)
-        self.cur = self.con.cursor()
+    def __init__(self, weekject: str):
+        self.weekject_con = sqlite3.connect(weekject)
+        self.weekject_cur = self.weekject_con.cursor()
+        self.query_obj = Query(weekject)
+        self.tag_db_con = sqlite3.connect("tags.db")
+        self.tag_db_cur = self.tag_db_con.cursor()
+        self.week_tag_db_con = sqlite3.connect("week_tag.db")
+        self.week_tag_db_cur = self.week_tag_db_con.cursor()
+
+    def initialise_tag_db(self):
+        self.tag_db_cur.executescript("""
+            DROP TABLE IF EXISTS tags;
+            CREATE TABLE tags (
+                tag_id INTEGER PRIMARY KEY,
+                tag_name TEXT
+            );
+        """)
+        self.tag_db_cur.close()
+
+    def initialise_week_tag_db(self):
+        self.week_tag_db_cur.executescript("""
+            DROP TABLE IF EXISTS week_tag;
+            CREATE TABLE week_tag (
+                week_no INTEGER,
+                tag_id INTEGER,
+                FOREIGN KEY (week_no) REFERENCES weekject(week_no),
+                FOREIGN KEY (tag_id) REFERENCES tags(tag_id),
+                PRIMARY KEY (week_no, tag_id)
+            );
+        """)
 
     def initialise_weekjects(self, birth_date):
         self.birth_date = birth_date
@@ -26,7 +49,7 @@ class FileHandling:
         4. Stores the full path to each log file inside the database.
         """
         # --- Step 1: Reset the database ---
-        self.cur.executescript("""
+        self.weekject_cur.executescript("""
             DROP TABLE IF EXISTS weekject;
             CREATE TABLE weekject (
                 week_no INTEGER PRIMARY KEY,
@@ -45,7 +68,7 @@ class FileHandling:
         # Ensure log directory exists
         os.makedirs("logs", exist_ok=True)
 
-        for i in range(1, (90 * 52 + 1)):  # 90 years of weeks
+        for i in range(1, (11)):  # 90 years of weeks
             
             # Format dates as YYYY-MM-DD
             start_str = current_date.strftime("%Y-%m-%d")
@@ -69,16 +92,15 @@ class FileHandling:
 
         # --- Step 3: Bulk insert into database ---
         print("Inserting data into the database...")
-        self.cur.executemany(
+        self.weekject_cur.executemany(
             "INSERT INTO weekject (week_no, start_date, end_date, age, rating, log_file) VALUES (?, ?, ?, ?, ?, ?)",
             weeks_data
         )
-        self.con.commit()
-        print("Database and log files successfully initialized!")
 
-    def close(self):
-        """
-        Safely close the database connection.
-        """
-        self.con.commit()
-        self.con.close()
+        self.initialise_tag_db()
+        self.initialise_week_tag_db()
+        print("Databases and log files successfully initialized!")
+    
+
+    def add_tag_to_weekject(self, date:str, new_tags:list):
+        pass

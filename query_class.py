@@ -7,7 +7,7 @@ class Query:
         self.con = sqlite3.connect(weekject)
         self.cur = self.con.cursor()
         
-    def query_weekject_from_date(self, date:str):
+    def query_weekject_from_date(self, date:str)  -> tuple:
         query = """
         SELECT * FROM weekject
         WHERE ? >= start_date AND ? <= end_date
@@ -15,7 +15,6 @@ class Query:
         self.cur.execute(query, (date, date))
         row = self.cur.fetchone()
 
-        print(row)
         return row
     
     
