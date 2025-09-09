@@ -10,7 +10,7 @@ class Query:
     def query_weekject_from_date(self, date:str)  -> tuple:
         query = """
         SELECT * FROM weekject
-        WHERE ? >= start_date AND ? <= end_date
+        WHERE start_date <= ? AND end_date >= ?
         """
         self.cur.execute(query, (date, date))
         row = self.cur.fetchone()
