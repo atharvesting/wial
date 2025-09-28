@@ -1,0 +1,6 @@
+- ✅ JOIN query to fetch all tags for a weekject in one go (so you can later view them neatly)
+- ✅ query_weekject_from_date(date)
+- ✅ add_tag_to_weekject(date, new_tags:list)
+- ✅ query_tags_from_weekject(date)
+- ✅ query_all_tags() → Small utility, helps in UI/tag suggestion.
+- check if tag exists method

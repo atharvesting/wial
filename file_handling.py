@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta
 import os
 from misc import calculate_age_given_birthdate_and_current_date
-from query_class import Query
+from query_and_append import Query
 
 class FileHandling:
 
@@ -34,7 +34,7 @@ class FileHandling:
         """)
         self.con.commit()
 
-    def initialise_weekjects(self, birth_date):
+    def initialise_weekbase(self, birth_date):
         self.birth_date = birth_date
         """
         Initialize the entire backend for the Weekject application.
@@ -98,28 +98,4 @@ class FileHandling:
         self.initialise_week_tag_db()
         print("Databases and log files successfully initialized!")
 
-        self.con.commit()
-    
-
-    def add_tag_to_weekject(self, date:str, new_tags:list):
-        week_no = self.query_obj.query_weekject_from_date(date)[0]
-        for tag in new_tags:
-            tag = tag.lower()
-            row = self.cur.execute("SELECT * FROM tags WHERE tag_name = ?", (tag,)).fetchone()
-            if row:
-                week_tag_check = self.cur.execute(
-                    "SELECT * FROM week_tag WHERE week_no = ? AND tag_id = ?",
-                    (week_no, row[0])).fetchone()
-                if week_tag_check:
-                    print(f"Tag #{tag} already applied to this weekject.")
-                else:
-                    self.cur.execute("INSERT INTO week_tag (week_no, tag_id) VALUES (?, ?)", (week_no, row[0]))
-                    print("Tag(s) added successfully")
-                    
-            else:
-                self.cur.execute("INSERT INTO tags(tag_name) VALUES (?)", (tag,))
-                tag_id = self.cur.lastrowid
-                self.cur.execute("INSERT INTO week_tag(week_no, tag_id) VALUES (?, ?)", (week_no, tag_id))
-                print("Tag was not there in the database. Successfully added to tag and week_tag DB.")    
-        
         self.con.commit()

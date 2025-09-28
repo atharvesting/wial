@@ -36,8 +36,8 @@ class LifeObject:
 
 
 
-
-
+me = LifeObject("31.03.2007")
+me.print_facts()
 
 
 '''# Initialisation with required dates

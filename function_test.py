@@ -1,9 +1,8 @@
-from query_class import Query
+from query_and_append import Query, Append
 from file_handling import FileHandling
+from tag_classes import TagRepository
 
-db = FileHandling("weekject.db")
-db.add_tag_to_weekject("2025-09-09", ["coding", "quiz"])
-
+tagdb = TagRepository("weekject.db")
 
 
 

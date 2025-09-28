@@ -1,12 +1,3 @@
-- JOIN query to fetch all tags for a weekject in one go (so you can later view them neatly)
-
-    create_weekject(date, metadata) → Without creation, nothing else matters.
-
-    query_weekject_from_date(date) → Needed for everything else to work.
-
-    add_tag_to_weekject(date, new_tags:list) → Tags are a core feature.
-
-    query_tags_from_weekject(date) → Lets you actually see what tags are attached.
 
     set_rating(date, rating:int) → Ratings give evaluative power; essential if you want progress tracking.
 
@@ -20,7 +11,7 @@
 
     delete_tag_from_weekject(date, tag) → Mistakes happen, you need correction.
 
-    query_all_tags() → Small utility, helps in UI/tag suggestion.
+    
 
 🌱 Nice-to-Have (polish + insights)
 
